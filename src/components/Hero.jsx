@@ -1,8 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Zap, ArrowRight } from 'lucide-react';
+import { Zap, ArrowRight, Layers } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Hero({ onOpenAudit }) {
+  const navigate = useNavigate();
+
   return (
     <section className="relative pt-12 md:pt-20 pb-16 md:pb-24 overflow-hidden bg-gradient-to-b from-slate-100 via-white to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 transition-colors duration-300">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-blue-500/10 dark:from-blue-900/20 via-transparent to-transparent opacity-70 pointer-events-none" />
@@ -33,6 +36,15 @@ export default function Hero({ onOpenAudit }) {
               className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white font-semibold px-8 py-3.5 md:py-4 rounded-full shadow-lg shadow-blue-600/30 transition-all flex items-center justify-center gap-2 text-sm sm:text-base cursor-pointer"
             >
               Book Your Free Tech Audit <ArrowRight size={18} />
+            </motion.button>
+
+            <motion.button 
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => navigate('/services')}
+              className="w-full sm:w-auto bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-semibold px-8 py-3.5 md:py-4 rounded-full transition-all flex items-center justify-center gap-2 text-sm sm:text-base cursor-pointer"
+            >
+              Explore Solutions <Layers size={18} />
             </motion.button>
           </div>
         </motion.div>

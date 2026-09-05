@@ -1,10 +1,18 @@
 import React from 'react';
+import Hero from '../components/Hero';
+import Services from '../components/Services';
+import WhyChooseUs from '../components/WhyChooseUs';
+import TechStack from '../components/TechStack';
+import Testimonials from '../components/Testimonials';
 
-export default function Home() {
+export default function Home({ onOpenAudit }) {
   return (
-    <div className="py-20 text-center">
-      <h1 className="text-4xl font-bold">Welcome to LeadsByTech</h1>
-      <p className="mt-4 text-slate-600 dark:text-slate-400">High-converting SaaS & Web Applications</p>
-    </div>
+    <>
+      <Hero onOpenAudit={onOpenAudit} />
+      <Services />
+      <WhyChooseUs />
+      <TechStack />
+      <Testimonials />
+    </>
   );
 }
