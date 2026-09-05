@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
@@ -6,14 +7,21 @@ import { useTheme } from '../context/ThemeContext';
 export default function Navbar({ onOpenAudit }) {
   const [isOpen, setIsOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const navLinks = [
-    { name: 'Services', href: '#services' },
-    { name: 'Why Us', href: '#why-us' },
-    { name: 'Process', href: '#process' },
-    { name: 'Tech Stack', href: '#tech' },
-    { name: 'About', href: '#about' },
+    { name: 'Services', path: '/services' },
+    { name: 'Why Us', path: '/why-us' },
+    { name: 'Process', path: '/process' },
+    { name: 'Tech Stack', path: '/tech' },
+    { name: 'About', path: '/about' },
   ];
+
+  const handleNavigation = (path) => {
+    navigate(path);
+    setIsOpen(false);
+  };
 
   return (
     <nav className="sticky top-0 z-50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
@@ -21,24 +29,34 @@ export default function Navbar({ onOpenAudit }) {
         <div className="flex items-center justify-between h-16 sm:h-20">
           
           {/* Logo */}
-          <a href="#" className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+          <button 
+            onClick={() => handleNavigation('/')} 
+            className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight cursor-pointer"
+          >
             LeadsBy<span className="text-blue-600 dark:text-blue-500">Tech</span>
-          </a>
+          </button>
 
-          {/* Desktop Nav Links */}
+          {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white transition-colors"
-              >
-                {link.name}
-              </a>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = location.pathname === link.path;
+              return (
+                <button
+                  key={link.name}
+                  onClick={() => handleNavigation(link.path)}
+                  className={`text-sm font-medium transition-colors cursor-pointer ${
+                    isActive
+                      ? 'text-blue-600 dark:text-blue-400 font-semibold'
+                      : 'text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white'
+                  }`}
+                >
+                  {link.name}
+                </button>
+              );
+            })}
           </div>
 
-          {/* Desktop Right Actions */}
+          {/* Desktop Actions */}
           <div className="hidden md:flex items-center gap-4">
             <button
               onClick={toggleTheme}
@@ -56,7 +74,7 @@ export default function Navbar({ onOpenAudit }) {
             </button>
           </div>
 
-          {/* Mobile Right Controls (Theme + Hamburger) */}
+          {/* Mobile Right Controls */}
           <div className="flex items-center gap-2 md:hidden">
             <button
               onClick={toggleTheme}
@@ -68,7 +86,7 @@ export default function Navbar({ onOpenAudit }) {
 
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white focus:outline-none"
+              className="p-2 text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white focus:outline-none cursor-pointer"
               aria-label="Toggle Menu"
             >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -77,7 +95,7 @@ export default function Navbar({ onOpenAudit }) {
         </div>
       </div>
 
-      {/* Mobile Dropdown Menu Drawer */}
+      {/* Mobile Drawer Navigation */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -87,25 +105,31 @@ export default function Navbar({ onOpenAudit }) {
             transition={{ duration: 0.3 }}
             className="md:hidden bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 overflow-hidden"
           >
-            <div className="px-4 pt-2 pb-6 space-y-3">
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => setIsOpen(false)}
-                  className="block px-3 py-2 rounded-lg text-base font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all"
-                >
-                  {link.name}
-                </a>
-              ))}
+            <div className="px-4 pt-2 pb-6 space-y-2">
+              {navLinks.map((link) => {
+                const isActive = location.pathname === link.path;
+                return (
+                  <button
+                    key={link.name}
+                    onClick={() => handleNavigation(link.path)}
+                    className={`block w-full text-left px-4 py-3 rounded-xl text-base font-medium transition-all cursor-pointer ${
+                      isActive
+                        ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 font-semibold'
+                        : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-900'
+                    }`}
+                  >
+                    {link.name}
+                  </button>
+                );
+              })}
 
-              <div className="pt-2">
+              <div className="pt-3">
                 <button
                   onClick={() => {
                     setIsOpen(false);
                     onOpenAudit();
                   }}
-                  className="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 rounded-xl transition-all shadow-md shadow-blue-600/20 text-center"
+                  className="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-3 rounded-xl transition-all shadow-md shadow-blue-600/20 text-center cursor-pointer"
                 >
                   Get Free Audit
                 </button>
