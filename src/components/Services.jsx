@@ -1,8 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Globe, Code, Cpu, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Services() {
+  const navigate = useNavigate();
+
   const servicesList = [
     {
       icon: Globe,
@@ -22,7 +25,7 @@ export default function Services() {
   ];
 
   return (
-    <section id="services" className="py-16 md:py-24 bg-white dark:bg-slate-950 transition-colors duration-300">
+    <section className="py-16 md:py-24 bg-white dark:bg-slate-950 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -54,9 +57,13 @@ export default function Services() {
                 <p className="text-slate-600 dark:text-slate-400 text-xs sm:text-sm leading-relaxed mb-6">{service.desc}</p>
               </div>
 
-              <a href="#contact" className="text-blue-600 dark:text-blue-400 text-xs sm:text-sm font-semibold inline-flex items-center gap-2 group-hover:translate-x-1 transition-transform">
+              {/* ❌ <a href="#contact"> ki jagah  ✅ useNavigate() use kiya hai */}
+              <button 
+                onClick={() => navigate('/services')} 
+                className="text-blue-600 dark:text-blue-400 text-xs sm:text-sm font-semibold inline-flex items-center gap-2 group-hover:translate-x-1 transition-transform cursor-pointer border-none bg-transparent p-0 text-left"
+              >
                 Learn More <ArrowRight size={16} />
-              </a>
+              </button>
             </motion.div>
           ))}
         </div>
